@@ -1,0 +1,65 @@
+from sqlalchemy.orm import sessionmaker, Mapped, mapped_column
+from models import User, engine, Address
+import random
+from sqlalchemy import or_, and_, not_, func
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+user1 = User(name='John Doe', age=52)
+user2 = User(name='Jane Smith', age=34)
+
+# Creating addresses
+address1 = Address(
+    city='New York', state='NY', zip_code='10001'
+)
+address2 = Address(
+    city='Los Angeles', state='CA', zip_code='90001'
+)
+address3 = Address(
+    city='Chicago', state='IL', zip_code='60601'
+)
+
+user1.addresses.extend([address1, address2])
+user2.addresses.append(address3)
+
+session.add(user1)
+session.add(user2)
+session.commit()
+
+print(user1.addresses)
+print(user2.addresses)
+print(f"{address1.user = }")
+
+# users = session.query(User.age, func.count(User.id)).group_by(User.age).all()
+
+# users = session.query(User).filter(User.age > 24).filter(User.age < 50).all()
+
+# users_tuple = (
+#     session.query(User.age, User.name, func.count(User.id))
+#     .filter(User.age > 24)
+#     .order_by(User.age)
+#     .filter(User.age < 50)
+#     .group_by(User.age)
+#     .all()
+# )
+
+# for user in users_tuple:
+#     print(user)
+
+# only_iron_man = False
+# group_by_age = True
+
+# users = session.query(User)
+
+# if only_iron_man:
+#     users = users.filter(User.name == "Iron man")
+
+# if group_by_age:
+#     users = users.group_by(User.age)
+
+# users = users.all()
+
+# for user in users:
+#     print(user.age, user.name)
+
