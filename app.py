@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker, Mapped, mapped_column
-from models import User_3, engine, Address_2, Node
+from models import Student, User_3, engine, Address_2, Node, Course
 import random
 from sqlalchemy import or_, and_, not_, func
 
@@ -92,4 +92,19 @@ session = Session()
 # print(node1)
 # print(node2)
 # print(node3)
+# --------------------------------------------------------------------------------------------
+
+# maths = Course(title="Maths")
+# physics = Course(title="Physics")
+# bill = Student(name="Bill", courses=[maths, physics])
+# rob = Student(name="Rob", courses=[maths])
+
+# session.add_all([maths, physics, bill, rob])
+# session.commit()
+# --------------------------------------------------------------------------------------------
+
+
+# rob = session.query(Student).filter_by(name='Rob').first()
+# courses = [Course.title for Course in rob.courses]
+# print(courses)
 # --------------------------------------------------------------------------------------------

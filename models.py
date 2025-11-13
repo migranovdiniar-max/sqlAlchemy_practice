@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import Table, create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker, Mapped, mapped_column
 
 db_url = "sqlite:///database.db"
@@ -96,6 +96,33 @@ class Node(BaseModel):
 
     def __repr__(self):
         return f"{self.value}, {self.next_node}"
+
+
+class Student(BaseModel):
+    __tablename__ = 'students'
+
+    name = Column(String)
+    courses = relationship("Course", secondary="student_course", back_populates="students")
+
+
+#Association Table
+# student_course_link = Table("stundent_course", Base.metadata, 
+#                             Column("student_id", Integer, ForeignKey("students_id")),
+#                             Column("course_id", Integer, ForeignKey("courses.id")))
+class StundentCourse(BaseModel):
+    __tablename__ = 'student_course'
+
+    student_id = Column('student_id', Integer, ForeignKey('students.id'))
+    course_id = Column("course_id", Integer, ForeignKey("courses.id"))
+
+
+class Course(BaseModel):
+    __tablename__ = 'courses'
+
+    title = Column(String)
+    students = relationship("Student", secondary="student_course", back_populates="courses")
+
+
 
 
 Base.metadata.create_all(engine)
