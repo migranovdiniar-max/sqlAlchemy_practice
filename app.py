@@ -1,5 +1,6 @@
+from datetime import datetime
 from sqlalchemy.orm import sessionmaker, Mapped, mapped_column
-from models import Student, User_3, engine, Address_2, Node, Course
+from models import Appointment, Doctor, Patient, Post, Student, User_3, User_4, engine, Address_2, Node, Course
 import random
 from sqlalchemy import or_, and_, not_, func
 
@@ -108,3 +109,33 @@ session = Session()
 # courses = [Course.title for Course in rob.courses]
 # print(courses)
 # --------------------------------------------------------------------------------------------
+
+# dr_smith = Doctor(name="Dr. Smith", specialty="Cardiology")
+# john_doe = Patient(name="John Doe", dob=datetime(1990, 1, 1))
+# appointment = Appointment(doctor=dr_smith, patient=john_doe, notes="Routine check-up")
+
+# session.add_all([dr_smith, john_doe, appointment])
+# session.commit()
+
+# appointmets_for_dr_smith = session.query(Appointment).filter(
+#     Appointment.doctor.has(name='Dr. Smith')
+# ).all()
+
+# appointmets_for_john_doe = session.query(Appointment).filter(
+#     Appointment.patient.has(name='John Doe')
+# ).all()
+# --------------------------------------------------------------------------------------------
+
+# new_user = User_4(
+#     name = "Bob",
+#     posts = [
+#         Post(content=f"This is the content for {x}")
+#         for x in range(1, 5)
+#     ]
+# )
+
+# session.add(new_user)
+# session.commit()
+
+user = session.query(User_4).first()
+print(user.posts)

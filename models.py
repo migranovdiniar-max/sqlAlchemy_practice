@@ -1,5 +1,6 @@
-from sqlalchemy import Table, create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import Table, Text, create_engine, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker, Mapped, mapped_column
+from datetime import datetime
 
 db_url = "sqlite:///database.db"
 
@@ -123,6 +124,50 @@ class Course(BaseModel):
     students = relationship("Student", secondary="student_course", back_populates="courses")
 
 
+class Appointment(BaseModel):
+    __tablename__ = 'appointments'
 
+    doctor_id = Column(Integer, ForeignKey('doctors.id'))
+    patient_id = Column(Integer, ForeignKey("patients.id"))
+    appointment_date = Column(DateTime, default=datetime.utcnow)
+    notes = Column(String)
+
+    doctor = relationship("Doctor", backref="appointments")
+    patient = relationship("Patient", backref="appointments")
+
+
+class Doctor(BaseModel):
+    __tablename__ = 'doctors'
+
+    name = Column(String)
+    specialty = Column(String)
+
+
+class Patient(BaseModel):
+    __tablename__ = "patients"
+
+    name = Column(String)
+    dob = Column(DateTime)
+
+
+class User_4(BaseModel):
+    __tablename__ = 'users_4'
+
+    name = Column(String)
+    posts = relationship("Post", lazy="select", backref="user_4")
+
+    def __repr__(self):
+        return f"{self.name}"
+    
+
+class Post(BaseModel):
+    __tablename__ = "posts"
+
+    content = Column(Text)
+    user_id = Column(Integer, ForeignKey("users_4.id"))
+
+    def __repr__(self):
+        return f"{self.id}"
+    
 
 Base.metadata.create_all(engine)
